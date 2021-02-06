@@ -31,6 +31,11 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+  ),
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'profile',
+    # 'django_filters',
 ]
 
 MIDDLEWARE = [
