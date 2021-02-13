@@ -11,10 +11,19 @@ from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin
 )
 
+from subscriber.models import Subscriber
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     description = models.TextField(verbose_name="description")
+    type_of_subscriber = models.ForeignKey(
+        Subscriber,
+        on_delete=models.CASCADE,
+        related_name="type_of_subscriber",
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.user.username

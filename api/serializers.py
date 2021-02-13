@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from match.models import Match
 from message.models import Message
 from profile.models import Profile, Image
+from subscriber.models import Subscriber
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -52,11 +53,24 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ['image_file', 'obj']
 
 
+class SubscriberSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscriber
+        fields = ['type_subscriber', 'swipes', 'radius']
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+    subscriber = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['id', 'description', ]
+        fields = ['id', 'description', 'subscriber']
+
+    def get_subscriber(self, obj):
+        subscriber = Subscriber.objects.all().filter(type_subscriber=obj.type_of_subscriber)
+        s = SubscriberSerializer(subscriber, many=True, context=self.context)
+        return s.data
 
 
 class UserSerializer(serializers.ModelSerializer):

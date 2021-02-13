@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'profile',
     'match',
     'message',
+    'subscriber',
     # 'django_filters',
 ]
 
