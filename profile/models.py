@@ -24,6 +24,10 @@ class Profile(models.Model):
         null=True,
         blank=True
     )
+    ip_address = models.GenericIPAddressField(null=True)
+    # latitude = models.FloatField(min_value=-180,max_value=180)
+    # longitude = models.FloatField(min_value=-180,
+    #                                 max_value=180)
 
     def __str__(self):
         return self.user.username

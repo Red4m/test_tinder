@@ -6,7 +6,8 @@ from api import views
 router = DefaultRouter()
 # router.register('articles', views.ArticleViewSet, basename="articles")
 router.register('users', views.UserViewSet, basename="users")
-router.register('match', views.UserViewSet, basename="match")
+router.register('match', views.MatchViewSet, basename="match")
 urlpatterns = [
     path('', include(router.urls)),
+    path('sign-up', views.RegistryView.as_view())
     ]
