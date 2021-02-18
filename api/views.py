@@ -7,9 +7,10 @@ from rest_framework.viewsets import ModelViewSet
 
 from api.permissions import IsUserOrReadOnly
 from api.serializers import UserSerializer, MessageSerializer, MatchSerializer, \
-    RegistrySerializer
+    RegistrySerializer, ProfileSerializer
 from match.models import Match
 from message.models import Message
+from profile.models import Profile
 
 
 class UserViewSet(ModelViewSet):
@@ -32,3 +33,15 @@ class MatchViewSet(ModelViewSet):
 
 class RegistryView(CreateAPIView):
     serializer_class = RegistrySerializer
+
+
+class MessageViewSet(ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    lookup_field = "pk"
+
+
+class ProfileViewSet(ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = "pk"

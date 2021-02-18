@@ -7,8 +7,7 @@ class Subscriber(models.Model):
         ('vip', 'vip'),
         ('premium', 'premium')
     )
-    a = 1000
-    b = 1000
+
     NEW_CHOICES = {
         'standart':
             {
@@ -20,11 +19,7 @@ class Subscriber(models.Model):
                 'swipes': 100,
                 'radius': 25
             },
-        'premium':
-            {
-                'swipes': b,
-                'radius': a
-            }
+
     }
     type_subscriber = models.CharField(max_length=80,
                                        verbose_name="type_subscriber",
@@ -42,7 +37,6 @@ class Subscriber(models.Model):
             print(self.radius)
         super().save(force_insert=force_insert, force_update=force_update, using=using,
              update_fields=update_fields)
-
 
     def __str__(self):
         return self.type_subscriber

@@ -25,9 +25,8 @@ class Profile(models.Model):
         blank=True
     )
     ip_address = models.GenericIPAddressField(null=True)
-    # latitude = models.FloatField(min_value=-180,max_value=180)
-    # longitude = models.FloatField(min_value=-180,
-    #                                 max_value=180)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
 
     def __str__(self):
         return self.user.username

@@ -10,6 +10,8 @@ from subscriber.models import Subscriber
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    link = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         fields = [
@@ -17,8 +19,36 @@ class MessageSerializer(serializers.ModelSerializer):
             'match_dialog_id',
             'message_user_id',
             'message_to_user_id',
-            'chat_messages_text'
+            'chat_messages_text',
+            'link'
                   ]
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        if user.is_authenticated:
+            return super(MessageSerializer, self).update(instance,
+                                                         validated_data)
+        raise Exception('No credentials')
+
+    def get_link(self, obj):
+        uri = reverse('message-detail', kwargs={'pk': obj.pk})
+        return self.context['request'].build_absolute_uri(uri)
+    # def create(self, validated_data):
+    #     first_person_status = self.validated_data['first_person_status']
+    #     second_person_status = self.validated_data['second_person_status']
+    #     if first_person_status == second_person_status:
+    #         message = Message.objects.create_message(
+    #             match_dialog_id=validated_data['match_dialog_id'],
+    #             chat_messages_text=validated_data['chat_messages_text'],
+    #         )
+    #
+    #         message.save()
+    #         return message
+    #     else:
+    #         raise serializers.ValidationError(
+    #             {"message": "message govno"}
+    #         )
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -27,7 +57,33 @@ class MatchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Match
-        fields = ['id', 'status', 'first_id', 'second_id', 'message', 'link']
+        fields = ['id',
+                  'first_person_status',
+                  'second_person_status',
+                  'first_id', 'second_id',
+                  'message',
+                  'link'
+                  ]
+
+
+
+    # def create(self, **kwargs):
+    #     if self.validated_data['first_person_status'] and \
+    #             self.validated_data['first_person_status'] == self.validated_data['second_person_status']:
+    #         match = Match.objects.all()
+    #         match.get_message()
+    #         super().save(**kwargs)
+    # def get_fields(self, validated_data):
+    #     if self.validated_data['first_person_status'] and self.validated_data['first_person_status'] == self.validated_data['second_person_status']:
+    #         fields = ['id',
+    #                   'first_person_status',
+    #                   'second_person_status',
+    #                   'first_id', 'second_id',
+    #                   'message',
+    #                   'link'
+    #                   ]
+    #         return fields
+
 
     def get_link(self, obj):
         uri = reverse('match-detail', kwargs={'pk': obj.id})
@@ -35,8 +91,10 @@ class MatchSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
+        print(request)
         user = request.user
-        if user.is_authenticated and instance.pk == user.id:
+        print(user)
+        if user.is_authenticated:
             return super(MatchSerializer, self).update(instance,
                                                          validated_data)
         raise Exception('No credentials')
@@ -63,10 +121,23 @@ class SubscriberSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     subscriber = serializers.SerializerMethodField()
+    profile_link = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['id', 'description', 'subscriber']
+        fields = ['id', 'description', 'subscriber', 'latitude', 'longitude', 'profile_link']
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        if user.is_authenticated:
+            return super(ProfileSerializer, self).update(instance,
+                                                         validated_data)
+        raise Exception('No credentials')
+
+    def get_profile_link(self, obj):
+        uri = reverse('profile-detail', kwargs={'pk': obj.pk})
+        return self.context['request'].build_absolute_uri(uri)
 
     def get_subscriber(self, obj):
         subscriber = Subscriber.objects.all().filter(type_subscriber=obj.type_of_subscriber)
@@ -114,7 +185,7 @@ class RegistrySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'username','email', 'password', 'password2',
+            'username', 'email', 'password', 'password2',
         ]
 
     def create(self, validated_data):
@@ -124,14 +195,13 @@ class RegistrySerializer(serializers.ModelSerializer):
             user = User.objects.create_user(
                 username=validated_data['username'],
                 email=validated_data['email'],
-
             )
             user.set_password(password)
             user.save()
             return user
         else:
             raise serializers.ValidationError(
-                {"password":"Password are not the same"}
+                {"password": "Password are not the same"}
             )
 
 

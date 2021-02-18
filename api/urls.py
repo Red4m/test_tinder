@@ -7,6 +7,8 @@ router = DefaultRouter()
 # router.register('articles', views.ArticleViewSet, basename="articles")
 router.register('users', views.UserViewSet, basename="users")
 router.register('match', views.MatchViewSet, basename="match")
+router.register('message', views.MessageViewSet, basename="message")
+router.register('profile', views.ProfileViewSet, basename="profile")
 urlpatterns = [
     path('', include(router.urls)),
     path('sign-up', views.RegistryView.as_view())

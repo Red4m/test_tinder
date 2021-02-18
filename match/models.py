@@ -3,7 +3,8 @@ from django.db import models
 
 
 class Match(models.Model):
-    status = models.BooleanField(default=False)
+    first_person_status = models.BooleanField(default=False)
+    second_person_status = models.BooleanField(default=False)
     first_id = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

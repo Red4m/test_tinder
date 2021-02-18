@@ -5,5 +5,5 @@ from match.models import Match
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ("status", )
+    list_display = ("id", )
 
