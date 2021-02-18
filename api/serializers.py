@@ -17,11 +17,12 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'match_dialog_id',
-            'message_user_id',
-            'message_to_user_id',
             'chat_messages_text',
             'link'
                   ]
+
+    def save(self, **kwargs):
+        print(self.data)
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
@@ -34,21 +35,6 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_link(self, obj):
         uri = reverse('message-detail', kwargs={'pk': obj.pk})
         return self.context['request'].build_absolute_uri(uri)
-    # def create(self, validated_data):
-    #     first_person_status = self.validated_data['first_person_status']
-    #     second_person_status = self.validated_data['second_person_status']
-    #     if first_person_status == second_person_status:
-    #         message = Message.objects.create_message(
-    #             match_dialog_id=validated_data['match_dialog_id'],
-    #             chat_messages_text=validated_data['chat_messages_text'],
-    #         )
-    #
-    #         message.save()
-    #         return message
-    #     else:
-    #         raise serializers.ValidationError(
-    #             {"message": "message govno"}
-    #         )
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -64,26 +50,6 @@ class MatchSerializer(serializers.ModelSerializer):
                   'message',
                   'link'
                   ]
-
-
-
-    # def create(self, **kwargs):
-    #     if self.validated_data['first_person_status'] and \
-    #             self.validated_data['first_person_status'] == self.validated_data['second_person_status']:
-    #         match = Match.objects.all()
-    #         match.get_message()
-    #         super().save(**kwargs)
-    # def get_fields(self, validated_data):
-    #     if self.validated_data['first_person_status'] and self.validated_data['first_person_status'] == self.validated_data['second_person_status']:
-    #         fields = ['id',
-    #                   'first_person_status',
-    #                   'second_person_status',
-    #                   'first_id', 'second_id',
-    #                   'message',
-    #                   'link'
-    #                   ]
-    #         return fields
-
 
     def get_link(self, obj):
         uri = reverse('match-detail', kwargs={'pk': obj.id})
@@ -203,11 +169,3 @@ class RegistrySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": "Password are not the same"}
             )
-
-
-    # def save(self, **kwargs):
-    #     print(self.data)
-    #     password = self.validated_data['password']
-    #     password2 = self.validated_data['password2']
-    #     if
-    #     # super().save(**kwargs)

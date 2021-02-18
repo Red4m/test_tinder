@@ -12,16 +12,5 @@ class Message(models.Model):
         related_name="match_dialog_id",
         null=True,
     )
-    message_user_id = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name="message_user_id",
-        null=True,
-    )
-    message_to_user_id = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name="message_to_user_id",
-        null=True,
-    )
+
 

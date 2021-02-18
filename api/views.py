@@ -22,7 +22,7 @@ class UserViewSet(ModelViewSet):
 
 
 class MatchViewSet(ModelViewSet):
-    # permission_classes = (IsAuthorOrReadOnly )
+
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
     lookup_field = "pk"
